@@ -46,7 +46,7 @@ make check
 
 包括格式/类型/workflow 规则、门禁负向测试、Go race 与逐文件 ≥80% 覆盖率、SQLite/HTTP 集成、真实服务进程和 Electron 窗口 E2E。必需 Go/桌面测试拒绝空测试和跳过。桌面 E2E 使用临时项目与数据目录，不调用模型、不改用户项目。临时窗口会在测试结束后关闭。
 
-`make hooks` 安装本仓库 hook，推送前执行 `make check`。`make package` 构建 macOS arm64 开发 zip，启动包内应用验证，再检查解包后的文件/hash；`make release-verify` 核对现有包。当前包未签名、未公证，服务须手动启动。线上 CI、分支保护与发布审批尚待配置远端后验证。
+`make hooks` 安装本仓库 hook，推送前执行 `make check`。`make package` 构建 macOS arm64 开发 zip，启动包内应用验证，再检查解包后的文件/hash；`make release-verify` 核对现有包。当前包未签名、未公证，服务须手动启动。GitHub 线上 CI 已实跑；私有仓库的分支保护和发布审批受当前账户方案限制，见[远端验证记录](docs/verification/github-remote.md)。
 
 TDD 证据记录工具可保存命令输出、退出码、文件摘要和运行前源码归档：
 
@@ -67,3 +67,4 @@ python3 scripts/capture-check.py green go test -race -count=1 ./...
 - [测试与 E2E](docs/testing.md)、[CI/CD 与发布](docs/release.md)
 - [参考项目工程分析](docs/reference/deepseek-harness-engineering.md)
 - [依赖与分发清单](docs/dependencies.md)、[本地验证记录](docs/verification/engineering-gates.md)
+- [GitHub 远端 CI 与保护规则验证](docs/verification/github-remote.md)

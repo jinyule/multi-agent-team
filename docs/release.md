@@ -4,7 +4,7 @@
 
 当前只构建 **macOS arm64 unsigned-development** 候选：一个 Electron `.app`、独立 teamd、运行说明和实际分发依赖许可证。服务仍手动启动，没有安装登录项；未接入真实 Agent。未完成 Developer ID 签名、公证、安装器、产品许可选择，不能把该 zip 当成面向公众的正式安装包，也不要求用户关闭 Gatekeeper。
 
-代码规则和本地产物可验证。当前 Git 仓库还没有 commit 或 remote，因此没有线上 CI 运行、分支保护或 environment 审批生效的证据。这些部署前提要在实际 GitHub/Gitea 仓库配置后复核，不能仅凭 YAML 声称完成。
+代码规则、本地产物和 GitHub Actions 已实际验证。私有仓库为 `jinyule/multi-agent-team`；初始 main push 的完整 CI、汇总检查及三类 artifact 均成功。当前 GitHub Free 方案拒绝私有仓库 branch protection/ruleset 和 environment required reviewers，因此这些保护尚未生效，不能仅凭 YAML 声称完成。API 返回与运行链接见[远端验证记录](verification/github-remote.md)。
 
 ## PR 与主干 CI
 
@@ -40,6 +40,6 @@ Gitea 的 Actions、environment、分支规则不保证与 GitHub 等价。当�
 
 ## 当前证据与外部依据
 
-当前本地检查和产物验证记录在[工程门禁验证记录](verification/engineering-gates.md)。参考项目的规则和差异见[分析](reference/deepseek-harness-engineering.md)。
+当前本地检查和产物验证记录在[工程门禁验证记录](verification/engineering-gates.md)，线上执行及平台限制见[GitHub 远端验证](verification/github-remote.md)。参考项目的规则和差异见[分析](reference/deepseek-harness-engineering.md)。
 
 macOS runner 选择参考 [GitHub hosted runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)；环境审查需参考 [GitHub environments](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments) 并检查实际仓库；Electron 包装使用 [官方 Packager](https://github.com/electron/packager)。

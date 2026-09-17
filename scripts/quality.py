@@ -100,6 +100,10 @@ def coverage_failures(actual, sources, threshold):
     return errors
 
 
+def coverage_line(filename, covered, total):
+    return f"coverage {filename} — {covered}/{total} statements ({covered * 100 / total if total else 0:.1f}%)"
+
+
 def repository_errors(root):
     errors = []
     for path in source_files(root):
@@ -166,7 +170,7 @@ def main():
         errors = coverage_failures(actual, sources, args.minimum)
         for filename in sources:
             covered, total = actual.get(filename, (0, 0))
-            print(f"{filename}: {covered}/{total} ({covered * 100 / total if total else 0:.1f}%)")
+            print(coverage_line(filename, covered, total))
     elif args.command == "junit":
         print(f"Verified {verify_junit(args.report.read_text(), args.minimum)} executed tests; no skipped/failing cases")
     elif args.command == "jobs":
