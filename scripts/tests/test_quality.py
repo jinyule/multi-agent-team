@@ -56,6 +56,11 @@ class GateTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             quality.parse_go_coverage('mode: atomic\ngarbage\n')
 
+    def test_coverage_output_is_not_parsed_as_a_github_error_annotation(self):
+        line = quality.coverage_line("internal/api/api.go", 69, 80)
+        self.assertEqual(line, "coverage internal/api/api.go — 69/80 statements (86.2%)")
+        self.assertNotIn(".go:", line)
+
     def test_source_inventory_excludes_secrets_builds_and_external_symlinks(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

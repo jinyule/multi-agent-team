@@ -4,7 +4,7 @@
 
 当前只构建 **macOS arm64 unsigned-development** 候选：一个 Electron `.app`、独立 teamd、运行说明、MIT 应用许可和实际分发依赖许可证。服务仍手动启动，没有安装登录项；未接入真实 Agent。未完成 Developer ID 签名、公证和安装器，不能把该 zip 当成面向公众的正式安装包，也不要求用户关闭 Gatekeeper。
 
-代码规则和本地产物可验证。GitHub 远端与线上 CI 已建立；分支保护和 environment 审批必须以 API 实查与故意违规验证为证，不能仅凭 YAML 声称完成。
+代码规则、本地产物和 GitHub Actions 已实际验证。公开仓库为 `jinyule/multi-agent-team`；main 的完整 CI、汇总检查及三类 artifact 均成功。main branch protection 与 `development-release` required reviewer 已通过 API 实查；PR 仍需一名非作者批准。配置和运行链接见[远端验证记录](verification/github-remote.md)。
 
 ## PR 与主干 CI
 
@@ -20,7 +20,7 @@ workflow 默认 contents:read，checkout 不持久化凭据，Actions 固定提�
 2. 使用打包 `.app` 和 teamd 重跑三条真实桌面 E2E。构建前保存源码清单，验证后核对未变化；有变化则失败。通过后记录源码清单、源码摘要、commit、dirty、版本、平台、工具链与所有产物文件 hash、权限和符号链接。
 3. 生成 zip、manifest 和 SHA256SUMS，解包并逐项核验，拒绝缺失/增加/改动文件或越界链接。`make release-verify` 允许本地未提交预览；CI 发布校验禁止 dirty/无 commit 候选。
 4. `.github/workflows/release.yml` 仅 workflow_dispatch。选择已合入 main 的 `v<desktop/package.json version>` tag；preflight 核对 tag、版本、main 祖先关系、干净工作树。candidate job 跑完整 check、package 和严格 verify。
-5. `publish=false`（默认）仅准备候选。需要实际发布时由人手动选择 `publish=true`，publish job 还需 `development-release` 环境审批。它下载同一次运行中的候选，只校验并上传，不安装依赖、不重建、不读取模型凭据。
+5. `publish=false`（默认）仅准备候选。需要实际发布时由人手动选择 `publish=true`，publish job 还需 `development-release` 环境审批。`scripts/release_approval.py` 默认拒绝上传；只有实际核对 required reviewers 后，管理员才可将仓库变量 `RELEASE_APPROVAL_CONFIGURED` 设为精确的 `true`。它下载同一次运行中的候选，只校验并上传，不安装依赖、不重建、不读取模型凭据。
 6. 写权限仅授予 publish job，GH_TOKEN 仅传入发布步骤。生成 release notes 标明 unsigned development 和能力限制，以 prerelease 发布。相同 tag 的已有 Release 不覆盖；远端结果不确定时先人工核对资产 hash，再处理重试。
 
 源码变化使 source_digest 失效；重新构建后的候选是新产物，不能沿用旧审批。签名/公证会改变字节，未来需在校验前加入签名、公证、staple、Gatekeeper 验证并重新做产物 E2E。稳定发布在这些前提完成前不开放。
@@ -32,7 +32,8 @@ workflow 默认 contents:read，checkout 不持久化凭据，Actions 固定提�
 - main 禁止直接推送/force push/删除；必需状态为精确名称 `all checks passed`，严格要求最新 base；适用时使用 merge queue，并核对 merge_group 触发后再启用队列。
 - 需要非作者 review，dismiss stale approvals；最新提交再次确认。人类和创建 PR 的机器人身份分离，避免同一账户不能自批。管理员也不默认绕过规则。
 - 本平台规定每次合并由人决定；GitHub 原生 approval 与平台 Agent 内部交叉检视分别记录，不能互相冒充。
-- `development-release` 配置 required reviewers、禁止自批/绕过、限定版本 tag；缺少 required reviewers 的环境名本身不会提供审批。根据账户方案支持能力检查，不能假定所有仓库都有相同环境保护。
+- `development-release` 配置 required reviewer 并限定 protected branch。当前只有仓库所有者一个可用审批身份，因此 `prevent_self_review=false`，它强制一次显式的人类发布决定，但不提供双人分离；增加维护者后应启用防自批。缺少 required reviewer 的环境名本身不提供审批。
+- 未完成上述核对时保持远端 release workflow disabled，且不得设置 `RELEASE_APPROVAL_CONFIGURED=true`。环境名、变量和 workflow 必须三者同时核验，变量不能替代 GitHub 的 reviewer 保护。
 - 发布 tag 保护与维护者权限、Actions 权限、工件留存和默认分支应实查；记录 repository、检查日期与结果。不要让未审核 workflow 变更自行扩大写权限。
 - 本仓库尚未配置特定 CODEOWNERS 身份；设置远端时将 workflow、质量脚本、权限/数据库与 release 文件交给实际负责人检视，不创建虚假用户条目。
 
@@ -40,6 +41,6 @@ Gitea 的 Actions、environment、分支规则不保证与 GitHub 等价。当�
 
 ## 当前证据与外部依据
 
-当前本地检查和产物验证记录在[工程门禁验证记录](verification/engineering-gates.md)。参考项目的规则和差异见[分析](reference/deepseek-harness-engineering.md)。
+当前本地检查和产物验证记录在[工程门禁验证记录](verification/engineering-gates.md)，线上执行及平台限制见[GitHub 远端验证](verification/github-remote.md)。参考项目的规则和差异见[分析](reference/deepseek-harness-engineering.md)。
 
 macOS runner 选择参考 [GitHub hosted runners](https://docs.github.com/en/actions/reference/runners/github-hosted-runners)；环境审查需参考 [GitHub environments](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments) 并检查实际仓库；Electron 包装使用 [官方 Packager](https://github.com/electron/packager)。

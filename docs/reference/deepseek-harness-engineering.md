@@ -68,4 +68,4 @@
 | 手动审批后发布相同 bytes | release workflow candidate/publish 分离、环境保护配置清单 |
 | 文档和决策随改动 | AGENTS、CONTRIBUTING、ADR/Agent Note、PR 模板 |
 
-以上本地机制可以验证；线上分支保护、环境审批与 CI 运行结果必须以未来实际仓库配置为证。当前无远端，不能声称已生效。
+以上本地机制可以验证；线上分支保护、环境审批与 CI 运行结果必须以实际仓库配置为证。GitHub 实跑结果、公开前的方案限制和公开后生效的保护记录在[远端验证](../verification/github-remote.md)，不能从 workflow 文件本身推断保护已生效。

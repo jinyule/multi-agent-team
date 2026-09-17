@@ -42,6 +42,11 @@ test("automatic release, absent environment and rebuilding during publish are re
     (w) => (w.on.push = {}),
     (w) => delete w.jobs.publish.environment,
     (w) => w.jobs.publish.steps.push({ run: "make package" }),
+    (w) => {
+      w.jobs.publish.steps = w.jobs.publish.steps.filter(
+        (step) => step.run !== "python3 scripts/release_approval.py",
+      );
+    },
   ]) {
     const changed = structuredClone(release);
     mutate(changed);

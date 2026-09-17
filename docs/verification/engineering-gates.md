@@ -1,6 +1,6 @@
 # 工程门禁验证记录
 
-日期：2026-09-12。范围：deepseek-harness 工程规则适配、本仓库质量与 CI/CD、真实 service/Electron/开发候选 E2E。线上 CI 和发布环境未验证。
+日期：2026-09-12。范围：deepseek-harness 工程规则适配、本仓库质量与 CI/CD、真实 service/Electron/开发候选 E2E。本页保留当日的本机证据；2026-09-17 的线上结果见[GitHub 远端验证](github-remote.md)。
 
 参考仓库 `/opt/code/open-source/agent/deepseek-harness` 的提交为 `52b21429d0560e137c04746f7a3cea09822a8120`，研究和实现后工作树均干净。没有复制参考源码、运行其完整测试矩阵或修改 nano-harness。工程分析与适配理由见[分析](../reference/deepseek-harness-engineering.md)。
 
@@ -37,6 +37,6 @@
 
 ## 尚不能声称完成的事项
 
-没有远端，未运行线上 CI、配置 main 分支保护、required reviewers 或 development-release 环境；GitHub YAML 不代表 Gitea 已具有等价保护。未提交、推送、合并或发布，也没有非作者 PR review 结果。实际发布仍需人的明确决定。
+本页执行时尚无远端；此后已经创建公开 GitHub 仓库并运行线上 CI。main 分支保护、非作者批准和 `development-release` required reviewer 已生效，具体配置和 API 证据见[远端验证](github-remote.md)。GitHub YAML 不代表 Gitea 已有等价保护；实际发布仍需人的明确决定。
 
 当前包未签名、未公证，没有安装器/自动升级/登录项。项目于 2026-09-17 采用 MIT License；这不改变开发包的未签名状态。macOS 原生目录选择器、Intel Mac、真实模型引擎、Agent 自动编程与交叉检视、受托项目 CI/CD 不在这次已通过的验收范围。双引擎仍按[接入契约](../engine-contract.md)在 M2 同轮交付。
