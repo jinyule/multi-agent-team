@@ -37,6 +37,6 @@
 
 ## 尚不能声称完成的事项
 
-本页执行时尚无远端；此后已经创建私有 GitHub 仓库并运行线上 CI。main 分支保护、required reviewers 与 development-release 审批仍未生效，具体原因和 API 证据见[远端验证](github-remote.md)。GitHub YAML 不代表 Gitea 已有等价保护；实际发布仍需人的明确决定。
+本页执行时尚无远端；此后已经创建公开 GitHub 仓库并运行线上 CI。main 分支保护、非作者批准和 `development-release` required reviewer 已生效，具体配置和 API 证据见[远端验证](github-remote.md)。GitHub YAML 不代表 Gitea 已有等价保护；实际发布仍需人的明确决定。
 
-当前包未签名、未公证，没有安装器/自动升级/登录项，产品公开许可尚未选定。macOS 原生目录选择器、Intel Mac、真实模型引擎、Agent 自动编程与交叉检视、受托项目 CI/CD 不在这次已通过的验收范围。双引擎仍按[接入契约](../engine-contract.md)在 M2 同轮交付。
+当前包未签名、未公证，没有安装器/自动升级/登录项。项目于 2026-09-17 采用 MIT License；这不改变开发包的未签名状态。macOS 原生目录选择器、Intel Mac、真实模型引擎、Agent 自动编程与交叉检视、受托项目 CI/CD 不在这次已通过的验收范围。双引擎仍按[接入契约](../engine-contract.md)在 M2 同轮交付。
