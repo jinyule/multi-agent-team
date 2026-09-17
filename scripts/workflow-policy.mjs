@@ -81,6 +81,17 @@ export function validateWorkflow(name, workflow) {
     if (publish?.permissions?.contents !== "write")
       errors.push("publish permission must be scoped to publish job");
     if (
+      !(publish?.steps || []).some(
+        (step) =>
+          step.run === "python3 scripts/release_approval.py" &&
+          step.env?.RELEASE_APPROVAL_CONFIGURED ===
+            "${{ vars.RELEASE_APPROVAL_CONFIGURED }}",
+      )
+    )
+      errors.push(
+        "publish must fail closed until environment protection is verified",
+      );
+    if (
       (publish?.steps || []).some((step) =>
         /npm .*ci|make |go build|package-desktop/.test(step.run || ""),
       )
