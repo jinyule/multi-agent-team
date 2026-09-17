@@ -1,0 +1,29 @@
+{
+  "name": "multi-agent-team-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "main.cjs",
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "start": "electron .",
+    "test:e2e": "python3 ../scripts/run-desktop-e2e.py",
+    "format": "prettier --write src e2e main.cjs preload.cjs index.html tsconfig.json vite.config.ts"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@electron/packager": "20.3.0",
+    "@types/node": "24.13.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "electron": "44.3.0",
+    "playwright": "1.63.0",
+    "prettier": "3.9.6",
+    "typescript": "7.0.2",
+    "vite": "8.3.0",
+    "yaml": "2.9.1"
+  }
+}

@@ -1,0 +1,13 @@
+desktop/node_modules/
+desktop/dist/
+artifacts/
+bin/
+release/
+.git/
+docs/
+README.md
+AGENTS.md
+CONTRIBUTING.md
+CHANGELOG.md
+SECURITY.md
+desktop/package-lock.json

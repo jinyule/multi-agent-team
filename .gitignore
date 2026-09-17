@@ -1,0 +1,14 @@
+artifacts/
+bin/
+node_modules/
+desktop/dist/
+.DS_Store
+*.sock
+release/
+__pycache__/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+.cache/
