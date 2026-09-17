@@ -26,7 +26,7 @@ def source_files(root):
             p = Path(base) / name
             if p.is_symlink() or name.startswith(".env") or p.suffix in {".pem", ".key", ".p12"}:
                 continue
-            if p.suffix in SUFFIXES or name in {"Makefile", ".gitignore", ".editorconfig", ".prettierignore", ".nvmrc", "pre-commit", "pre-push"}:
+            if p.suffix in SUFFIXES or name in {"LICENSE", "Makefile", ".gitignore", ".editorconfig", ".prettierignore", ".nvmrc", "pre-commit", "pre-push"}:
                 files.append(p)
     return sorted(files)
 
@@ -126,6 +126,8 @@ def repository_errors(root):
                     errors.append(f"{name}: broken relative link {target}")
     package = json.loads((root / "desktop/package.json").read_text())
     lock = json.loads((root / "desktop/package-lock.json").read_text())["packages"][""]
+    if package.get("license") != "MIT" or lock.get("license") != "MIT":
+        errors.append("desktop package and lockfile must declare MIT")
     for section in ["dependencies", "devDependencies"]:
         if lock.get(section) != package.get(section):
             errors.append(f"desktop lockfile differs: {section}")

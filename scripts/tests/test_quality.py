@@ -59,12 +59,12 @@ class GateTests(unittest.TestCase):
     def test_source_inventory_excludes_secrets_builds_and_external_symlinks(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for name in ["main.go", ".env", ".env.local", "private.pem", "node_modules/x.js", "artifacts/log.txt", "docs/readme.md"]:
+            for name in ["main.go", "LICENSE", ".env", ".env.local", "private.pem", "node_modules/x.js", "artifacts/log.txt", "docs/readme.md"]:
                 path = root / name
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text("sample\n")
             (root / "escape.md").symlink_to("/etc/hosts")
-            self.assertEqual([p.relative_to(root).as_posix() for p in quality.source_files(root)], ["docs/readme.md", "main.go"])
+            self.assertEqual([p.relative_to(root).as_posix() for p in quality.source_files(root)], ["LICENSE", "docs/readme.md", "main.go"])
 
     def test_inventory_digest_changes_with_content(self):
         with tempfile.TemporaryDirectory() as directory:

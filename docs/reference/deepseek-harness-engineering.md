@@ -46,7 +46,7 @@
 
 当前交付物改为 Electron `.app`、独立 teamd 和许可证说明的 macOS arm64 开发 zip。先从显式文件集合构建，真实运行打包产物 E2E，再生成逐文件/符号链接清单、源码摘要、commit、版本、工具链、SHA256SUMS；解包再次核验。发布 job 无安装/构建，验证相同 bytes 后发布开发 prerelease；手动触发、tag/main 校验、独立环境审批和最小写权限。参考项目的 npm 多包 family/vendor 发布不适用。
 
-当前没有产品代码分发许可证、Developer ID、公证或正式安装器决定，产物明确标为 unsigned-development。签名、公证后的文件摘要将不同，必须重新做产物验证，不能沿用未签名包的清单。见 [发布规则](../release.md)。
+本项目于 2026-09-17 独立选用 MIT License；当前仍没有 Developer ID 签名、公证或正式安装器，产物明确标为 unsigned-development。签名、公证后的文件摘要将不同，必须重新做产物验证，不能沿用未签名包的清单。见 [发布规则](../release.md)。
 
 ## 6. 文档、贡献和依赖
 

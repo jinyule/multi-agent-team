@@ -60,14 +60,14 @@ def verify_payload(payload, manifest):
     actual = inventory(payload)
     if not actual or actual != manifest.get("files"):
         raise ValueError("release payload differs from verified manifest")
-    for name in ["teamd", "MultiAgentTeam.app/Contents/MacOS/MultiAgentTeam", "MultiAgentTeam.app/Contents/Resources/app.asar", "README.txt", "THIRD_PARTY_NOTICES.txt", "LICENSE", "LICENSES.chromium.html"]:
+    for name in ["teamd", "MultiAgentTeam.app/Contents/MacOS/MultiAgentTeam", "MultiAgentTeam.app/Contents/Resources/app.asar", "README.txt", "APPLICATION_LICENSE.txt", "THIRD_PARTY_NOTICES.txt", "LICENSE", "LICENSES.chromium.html"]:
         if name not in actual:
             raise ValueError(f"required release artifact missing: {name}")
 
 
 def write_notices():
     # Preserve upstream notices from the actual module cache and Electron package.
-    lines = ["Multi Agent Team: development preview\n", "Application licensing is not yet selected; this is not a redistribution license.\n"]
+    lines = ["Multi Agent Team: development preview\n", "Application source is licensed under MIT; see APPLICATION_LICENSE.txt.\n"]
     goroot = Path(subprocess.check_output(["go", "env", "GOROOT"], cwd=ROOT, text=True).strip())
     lines.append("\n--- Go runtime and standard library ---\n" + go_license(goroot) + "\n")
     decoder = json.JSONDecoder()
@@ -116,9 +116,11 @@ def pack():
         else:
             shutil.copy2(item, destination)
     shutil.copy2(ROOT / "bin/teamd", PAYLOAD / "teamd")
+    shutil.copy2(ROOT / "LICENSE", PAYLOAD / "APPLICATION_LICENSE.txt")
     (PAYLOAD / "README.txt").write_text(
         "Multi Agent Team — unsigned macOS arm64 development preview\n\n"
         "This is not signed or notarized for public distribution. Do not disable Gatekeeper.\n"
+        "The application source is licensed under MIT; see APPLICATION_LICENSE.txt.\n"
         "In a terminal, run the included ./teamd, then launch MultiAgentTeam.app.\n"
         "Quit the terminal service with Ctrl+C; quitting the desktop leaves it running.\n"
         "No login item is installed. Agent execution and Git delivery are not available yet.\n"

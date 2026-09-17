@@ -1,5 +1,7 @@
 # 协作团队
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 个人使用的多 Agent 编程平台。采用独立 macOS 桌面与本机任务服务：固定团队承担需求、开发、测试、检视和交付准备，用户负责方向及最终决定。
 
 当前处于基础实现阶段。已选首轮引擎为 **Codex 与 Claude Code**，随后接入 nano-harness。真实引擎执行、团队调度及面向受托项目的质量门禁、PR/CI 和发布准备尚未交付；当前目标保持“等待引擎接入”，不会自动运行编程任务。本仓库自身已建立工程门禁、GitHub workflow 和开发包验证。
@@ -67,3 +69,7 @@ python3 scripts/capture-check.py green go test -race -count=1 ./...
 - [测试与 E2E](docs/testing.md)、[CI/CD 与发布](docs/release.md)
 - [参考项目工程分析](docs/reference/deepseek-harness-engineering.md)
 - [依赖与分发清单](docs/dependencies.md)、[本地验证记录](docs/verification/engineering-gates.md)
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。第三方组件适用其各自许可证，开发包中的完整分发清单见[依赖与分发清单](docs/dependencies.md)。

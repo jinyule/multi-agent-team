@@ -2,9 +2,9 @@
 
 ## 当前交付形态
 
-当前只构建 **macOS arm64 unsigned-development** 候选：一个 Electron `.app`、独立 teamd、运行说明和实际分发依赖许可证。服务仍手动启动，没有安装登录项；未接入真实 Agent。未完成 Developer ID 签名、公证、安装器、产品许可选择，不能把该 zip 当成面向公众的正式安装包，也不要求用户关闭 Gatekeeper。
+当前只构建 **macOS arm64 unsigned-development** 候选：一个 Electron `.app`、独立 teamd、运行说明、MIT 应用许可和实际分发依赖许可证。服务仍手动启动，没有安装登录项；未接入真实 Agent。未完成 Developer ID 签名、公证和安装器，不能把该 zip 当成面向公众的正式安装包，也不要求用户关闭 Gatekeeper。
 
-代码规则和本地产物可验证。当前 Git 仓库还没有 commit 或 remote，因此没有线上 CI 运行、分支保护或 environment 审批生效的证据。这些部署前提要在实际 GitHub/Gitea 仓库配置后复核，不能仅凭 YAML 声称完成。
+代码规则和本地产物可验证。GitHub 远端与线上 CI 已建立；分支保护和 environment 审批必须以 API 实查与故意违规验证为证，不能仅凭 YAML 声称完成。
 
 ## PR 与主干 CI
 
@@ -16,7 +16,7 @@ workflow 默认 contents:read，checkout 不持久化凭据，Actions 固定提�
 
 ## 从构建到发布
 
-1. 本地 `make check`；`make package` 从显式 app 文件集合构建，不带 node_modules、源码仓库、测试、凭据或本地数据库。Electron 自带运行时，当前没有 SDK worker 的额外 Node 运行时。
+1. 本地 `make check`；`make package` 从显式 app 文件集合构建，不带 node_modules、源码仓库、测试、凭据或本地数据库，并将根目录 MIT License 作为 `APPLICATION_LICENSE.txt` 纳入产物。Electron 自带运行时，当前没有 SDK worker 的额外 Node 运行时。
 2. 使用打包 `.app` 和 teamd 重跑三条真实桌面 E2E。构建前保存源码清单，验证后核对未变化；有变化则失败。通过后记录源码清单、源码摘要、commit、dirty、版本、平台、工具链与所有产物文件 hash、权限和符号链接。
 3. 生成 zip、manifest 和 SHA256SUMS，解包并逐项核验，拒绝缺失/增加/改动文件或越界链接。`make release-verify` 允许本地未提交预览；CI 发布校验禁止 dirty/无 commit 候选。
 4. `.github/workflows/release.yml` 仅 workflow_dispatch。选择已合入 main 的 `v<desktop/package.json version>` tag；preflight 核对 tag、版本、main 祖先关系、干净工作树。candidate job 跑完整 check、package 和严格 verify。
