@@ -33,6 +33,8 @@
 
 尝试给 `development-release` 增加 required reviewer 与 `prevent_self_review=true` 时，GitHub 返回 HTTP 422，说明当前 billing plan 不支持 required reviewers。该请求留下了一个无保护环境；验证后已立即删除，环境列表恢复为空，避免 workflow 名称造成已有审批保护的错觉。
 
-因此当前已证明 CI 能真实执行和产出证据，但 GitHub 还不能强制“PR + 必需检查 + 非作者 review”，发布 environment 也不能强制人审。要使门禁真正不可绕过，需要二选一：升级支持 private protection 的方案；或在明确接受源码公开后将仓库改为 public。随后再配置 main 禁止直推/force push/delete、必需 `all checks passed`、至少一名非作者 reviewer，以及 `development-release` required reviewers。
+因此当前已证明 CI 能真实执行和产出证据，但 GitHub 还不能强制“PR + 必需检查 + 非作者 review”，发布 environment 也不能强制人审。远端 `Development release` workflow 已停用；代码侧另加入 fail-closed preflight，仓库变量 `RELEASE_APPROVAL_CONFIGURED` 不为精确的 `true` 时拒绝上传。变量不能代替人审，只是防止误把无保护环境用于发布。
+
+要使门禁真正不可绕过，需要二选一：升级支持 private protection 的方案；或在明确接受源码公开后将仓库改为 public。随后再配置 main 禁止直推/force push/delete、必需 `all checks passed`、至少一名非作者 reviewer，以及 `development-release` required reviewers；核验后设置发布变量并重新启用 release workflow。
 
 初次推送时，本机 pre-push 的 `make check` 被未接受的 Xcode license 拦截；没有以该错误冒充测试失败。推送使用一次 `--no-verify`，其源码快照此前已完整通过本机检查，随后 GitHub 干净 macOS runner 又完整通过。该例外不改变后续默认 pre-push 规则。

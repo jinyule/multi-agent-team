@@ -5,9 +5,16 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import release
+import release_approval
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_publication_requires_verified_environment_protection(self):
+        release_approval.require_configured("true")
+        for value in [None, "", "false", "TRUE", "1"]:
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                release_approval.require_configured(value)
+
     def test_go_license_supports_distribution_and_homebrew_layouts(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

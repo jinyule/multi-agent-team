@@ -20,7 +20,7 @@ workflow 默认 contents:read，checkout 不持久化凭据，Actions 固定提�
 2. 使用打包 `.app` 和 teamd 重跑三条真实桌面 E2E。构建前保存源码清单，验证后核对未变化；有变化则失败。通过后记录源码清单、源码摘要、commit、dirty、版本、平台、工具链与所有产物文件 hash、权限和符号链接。
 3. 生成 zip、manifest 和 SHA256SUMS，解包并逐项核验，拒绝缺失/增加/改动文件或越界链接。`make release-verify` 允许本地未提交预览；CI 发布校验禁止 dirty/无 commit 候选。
 4. `.github/workflows/release.yml` 仅 workflow_dispatch。选择已合入 main 的 `v<desktop/package.json version>` tag；preflight 核对 tag、版本、main 祖先关系、干净工作树。candidate job 跑完整 check、package 和严格 verify。
-5. `publish=false`（默认）仅准备候选。需要实际发布时由人手动选择 `publish=true`，publish job 还需 `development-release` 环境审批。它下载同一次运行中的候选，只校验并上传，不安装依赖、不重建、不读取模型凭据。
+5. `publish=false`（默认）仅准备候选。需要实际发布时由人手动选择 `publish=true`，publish job 还需 `development-release` 环境审批。`scripts/release_approval.py` 默认拒绝上传；只有实际核对 required reviewers 后，管理员才可将仓库变量 `RELEASE_APPROVAL_CONFIGURED` 设为精确的 `true`。它下载同一次运行中的候选，只校验并上传，不安装依赖、不重建、不读取模型凭据。
 6. 写权限仅授予 publish job，GH_TOKEN 仅传入发布步骤。生成 release notes 标明 unsigned development 和能力限制，以 prerelease 发布。相同 tag 的已有 Release 不覆盖；远端结果不确定时先人工核对资产 hash，再处理重试。
 
 源码变化使 source_digest 失效；重新构建后的候选是新产物，不能沿用旧审批。签名/公证会改变字节，未来需在校验前加入签名、公证、staple、Gatekeeper 验证并重新做产物 E2E。稳定发布在这些前提完成前不开放。
@@ -33,6 +33,7 @@ workflow 默认 contents:read，checkout 不持久化凭据，Actions 固定提�
 - 需要非作者 review，dismiss stale approvals；最新提交再次确认。人类和创建 PR 的机器人身份分离，避免同一账户不能自批。管理员也不默认绕过规则。
 - 本平台规定每次合并由人决定；GitHub 原生 approval 与平台 Agent 内部交叉检视分别记录，不能互相冒充。
 - `development-release` 配置 required reviewers、禁止自批/绕过、限定版本 tag；缺少 required reviewers 的环境名本身不会提供审批。根据账户方案支持能力检查，不能假定所有仓库都有相同环境保护。
+- 未完成上述核对时保持远端 release workflow disabled，且不得设置 `RELEASE_APPROVAL_CONFIGURED=true`。环境名、变量和 workflow 必须三者同时核验，变量不能替代 GitHub 的 reviewer 保护。
 - 发布 tag 保护与维护者权限、Actions 权限、工件留存和默认分支应实查；记录 repository、检查日期与结果。不要让未审核 workflow 变更自行扩大写权限。
 - 本仓库尚未配置特定 CODEOWNERS 身份；设置远端时将 workflow、质量脚本、权限/数据库与 release 文件交给实际负责人检视，不创建虚假用户条目。
 
