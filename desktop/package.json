@@ -22,7 +22,7 @@
     "@types/react-dom": "19.3.0",
     "electron": "44.3.0",
     "playwright": "1.63.0",
-    "prettier": "3.9.6",
+    "prettier": "3.9.9",
     "typescript": "7.0.2",
     "vite": "8.3.0",
     "yaml": "2.9.1"
